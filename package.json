@@ -1,0 +1,21 @@
+{
+  "name": "ajcoffeemug",
+  "version": "1.0.0",
+  "description": "coffee mug task",
+  "main": "index.js",
+  "scripts": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/andrzejjurekqa/ajcoffeemug.git"
+  },
+  "author": "AJ",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/andrzejjurekqa/ajcoffeemug/issues"
+  },
+  "homepage": "https://github.com/andrzejjurekqa/ajcoffeemug#readme",
+  "devDependencies": {
+    "@playwright/test": "^1.43.1",
+    "@types/node": "^20.12.7"
+  }
+}

@@ -1,0 +1,11 @@
+{
+    "passwordField": "fakepass12345!",
+    "firstName": "Fake",
+    "lastName": "Name",
+    "birthdate": "11-10-1990",
+    "postalCode": "3781 DB",
+    "houseNumber": "111",
+    "phone": "0612345678",
+    "cardBox": true,
+    "newsletterBox": true
+}
