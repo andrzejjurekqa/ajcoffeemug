@@ -1,4 +1,5 @@
 import { Page, Locator } from "@playwright/test";
+import { faker } from "@faker-js/faker"
 
 export class RegisterPage {
 
@@ -13,9 +14,13 @@ export class RegisterPage {
     cardBox: Locator;
     newsletterBox: Locator;
     signUp: Locator;
-    incorrectEmailError: Locator;
-    existEmailError: Locator;
-
+    passValidation: Locator;
+    passWarning: Locator;
+    nameValidation: Locator;
+    lastNameValidation: Locator;
+    birthValidation: Locator;
+    houseValidation: Locator;
+    postValidation: Locator;
 
     constructor(page) {
         this.page = page;
@@ -29,18 +34,33 @@ export class RegisterPage {
         this.cardBox = page.locator('label').filter({ hasText: 'ja, ik wil de HEMA klantenpas' });
         this.newsletterBox = page.locator('label').filter({ hasText: 'ja, ik wil de HEMA nieuwsbrief' });
         this.signUp = page.getByRole('button', { name: 'meld je aan' });
-        this.incorrectEmailError = page.locator('#dwfrm_preregister_username_default-error')
-        this.existEmailError = page.locator('.error-message-body').nth(1);
+        this.passValidation = page.locator('#dwfrm_profile_login_password_NL-error');
+        this.passWarning = page.locator('.password-strength-msg');
+        this.nameValidation = page.locator('#dwfrm_profile_customer_name_firstname_NL-error');
+        this.lastNameValidation = page.locator('#dwfrm_profile_customer_name_lastname_NL-error')
+        this.birthValidation = page.locator('#dwfrm_profile_customer_birthday_NL-error');
+        this.postValidation = page.locator('#dwfrm_profile_address_postal_NL-error');
+        this.houseValidation = page.locator('#dwfrm_profile_address_houseNumber_NL-error');
+    }
+
+    generateBirthday() {
+        let day = faker.number.int({ min: 1, max: 28 });
+        let month = faker.number.int({ min: 1, max: 12 });
+        const year = faker.number.int({ min: 1912, max: 2006 });
+        return day.toString().padStart(2, "0") + '-' + month.toString().padStart(2, "0") + '-' + year.toString();
     }
 
     async register(): Promise<void> {
-        await this.passwordField.fill('fakepass12345!');
-        await this.firstName.fill('Fake');
-        await this.lastName.fill('Name');
-        await this.birthdate.fill('11-10-1990');
+        await this.passwordField.fill(faker.internet.password());
+        await this.firstName.fill(faker.person.firstName());
+        await this.lastName.fill(faker.person.lastName());
+        await this.birthdate.fill(this.generateBirthday());
         await this.postalCode.fill('3781 DB');
         await this.houseNumber.fill('111');
-        await this.phone.fill('0612345678');
+        await this.phone.fill(faker.string.numeric({ length: 10 }));
+        await this.selectCard(true);
+        await this.selectNewsletter(false);
+        await this.signUp.click();
     }
 
     async selectCard(checkbox: boolean) {
