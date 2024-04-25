@@ -37,7 +37,7 @@ export class RegisterPage {
         this.passValidation = page.locator('#dwfrm_profile_login_password_NL-error');
         this.passWarning = page.locator('.password-strength-msg');
         this.nameValidation = page.locator('#dwfrm_profile_customer_name_firstname_NL-error');
-        this.lastNameValidation = page.locator('#dwfrm_profile_customer_name_lastname_NL-error')
+        this.lastNameValidation = page.locator('#dwfrm_profile_customer_name_lastname_NL-error');
         this.birthValidation = page.locator('#dwfrm_profile_customer_birthday_NL-error');
         this.postValidation = page.locator('#dwfrm_profile_address_postal_NL-error');
         this.houseValidation = page.locator('#dwfrm_profile_address_houseNumber_NL-error');
@@ -50,9 +50,11 @@ export class RegisterPage {
         return day.toString().padStart(2, "0") + '-' + month.toString().padStart(2, "0") + '-' + year.toString();
     }
 
-    async register(): Promise<void> {
-        await this.passwordField.fill(faker.internet.password());
-        await this.firstName.fill(faker.person.firstName());
+    async register() {
+        let password = faker.internet.password();
+        let name = faker.person.firstName()
+        await this.passwordField.fill(password);
+        await this.firstName.fill(name);
         await this.lastName.fill(faker.person.lastName());
         await this.birthdate.fill(this.generateBirthday());
         await this.postalCode.fill('3781 DB');
@@ -61,12 +63,17 @@ export class RegisterPage {
         await this.selectCard(true);
         await this.selectNewsletter(false);
         await this.signUp.click();
+        return [password, name];
     }
 
     async selectCard(checkbox: boolean) {
-        if (checkbox = true) await this.newsletterBox.click()
+        if (checkbox === true) {
+            await this.cardBox.click();
+        }
     }
     async selectNewsletter(checkbox: boolean) {
-        if (checkbox = true) await this.newsletterBox.click()
+        if (checkbox === true) {
+            await this.newsletterBox.click();
+        }
     }
 }

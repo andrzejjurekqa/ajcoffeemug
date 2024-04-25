@@ -6,24 +6,28 @@ let baseUrl = 'https://hema.nl';
 import regData from '../../test-data/register.data.json';
 const data = JSON.parse(JSON.stringify(regData));
 import { faker } from "@faker-js/faker";
+import { MainPage } from "../../pages/main.page";
 
-let loginPage;
+let loginSidebar;
 let registerPage;
 let cookiesModal;
+let mainPage;
 
 test.describe('Registration', async () => {
     test.beforeEach(async ({ page }) => {
-        loginPage = new LoginSidebar(page);
+        loginSidebar = new LoginSidebar(page);
         registerPage = new RegisterPage(page);
         cookiesModal = new CookiesModal(page);
+        mainPage = new MainPage(page);
+
         await page.goto(baseUrl);
         await cookiesModal.acceptCookies.click();
-        await expect(cookiesModal.cookieModal).not.toBeVisible();
-        await loginPage.accountButton.click();
+        await expect(cookiesModal.cookies).not.toBeVisible();
+        await loginSidebar.accountButton.click();
     })
-    test.only('Register a new user', async ({ page }) => {
-        await loginPage.emailField.fill(faker.internet.email());
-        await loginPage.registerButton.click();
+    test('Register a new user', async () => {
+        await loginSidebar.emailField.fill(faker.internet.email());
+        await loginSidebar.registerButton.click();
         await registerPage.passwordField.fill(data.passwordField);
         await registerPage.firstName.fill(data.firstName);
         await registerPage.lastName.fill(data.lastName);
@@ -34,22 +38,22 @@ test.describe('Registration', async () => {
         await registerPage.selectCard(data.cardBox);
         await registerPage.selectNewsletter(data.newsletterBox);
         await registerPage.signUp.click();
-        await expect(page.locator('.acc-name-title')).toContainText('hoi ' + data.firstName);
+        await expect(mainPage.greeting).toContainText('hoi ' + data.firstName);
     })
 
     test('Registration validations - email', async () => {
-        await loginPage.emailField.fill('bordan');
-        await loginPage.registerButton.click();
-        await expect(loginPage.incorrectEmailError).toBeVisible();
-        await loginPage.emailField.fill('totallynotfake@email.com');
-        await loginPage.registerButton.click();
-        await expect(loginPage.existEmailError).toBeVisible();
-        await expect(loginPage.existEmailError).toContainText('dit e-mailadres is niet geldig');
+        await loginSidebar.emailField.fill('bordan');
+        await loginSidebar.registerButton.click();
+        await expect(loginSidebar.incorrectEmailError).toBeVisible();
+        await loginSidebar.emailField.fill('totallynotfake@email.com');
+        await loginSidebar.registerButton.click();
+        await expect(loginSidebar.existEmailError).toBeVisible();
+        await expect(loginSidebar.existEmailError).toContainText('dit e-mailadres is niet geldig');
 
     })
-    test.only('Registration validations - user data', async ({ page }) => {
-        await loginPage.emailField.fill('totallynotfake' + Math.floor(Math.random() * 100000) + '@email.com');
-        await loginPage.registerButton.click();
+    test('Registration validations - user data', async ({ page }) => {
+        await loginSidebar.emailField.fill('totallynotfake' + Math.floor(Math.random() * 100000) + '@email.com');
+        await loginSidebar.registerButton.click();
         await registerPage.passwordField.fill('a');
         await page.locator('.content-wrap').click();
         await expect(registerPage.passValidation).toContainText('wachtwoord is te kort, voer een wachtwoord in van minimaal 8 karakters')

@@ -28,13 +28,15 @@ export class LoginSidebar {
         this.incorrectCreds = page.locator('.js-login-error-message');
     }
 
-    async login(username: string, password: string): Promise<void> {
+    async login(username: string, password: string) {
         await this.username.fill(username);
         await this.password.fill(password);
         await this.loginButton.click();
     }
     async newEmail() {
-        await this.emailField.fill(faker.internet.email());
+        let username = faker.internet.email()
+        await this.emailField.fill(username);
         await this.registerButton.click();
+        return username; 
     }
 }
