@@ -1,26 +1,21 @@
 import { Page, Locator } from "@playwright/test";
+import { Generics } from "./generic/generics"
 
-export class OrderPage {
+export class OrderPage extends Generics {
 
     page: Page;
     itemInfo: Locator;
     totalAmount: Locator;
 
-    constructor(page) {
+    constructor(page: Page) {
+        super();
+        this.page = page;
         this.itemInfo = page.locator('.item-info');
-        this.totalAmount = page.locator('.total-amount')
+        this.totalAmount = page.locator('.total-amount');
     }
 
     //loop through products and return true if found 
     async verifyItemInOrder(productName) {
-        const items = this.itemInfo;
-        for (let i = 0; i < await items.count(); i++) {
-            const itemList = await items.nth(i).textContent();
-            if (itemList!.includes(productName!)) {
-                return true
-            } else {
-                throw new Error('Item not found');
-            }
-        }
+        this.genericLoop(this.itemInfo, productName)
     }
 }
