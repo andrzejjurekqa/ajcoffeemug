@@ -33,6 +33,7 @@ export class LoginSidebar {
         await this.password.fill(password);
         await this.loginButton.click();
     }
+    
     async newEmail() {
         let username = faker.internet.email()
         await this.emailField.fill(username);

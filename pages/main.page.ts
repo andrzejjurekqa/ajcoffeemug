@@ -52,6 +52,7 @@ export class MainPage {
         await this.available.click();
     }
 
+    //loop through product names and see if it matches the category
     async verifyProductType(text: string) {
         const names = this.productName;
         for (let i = 0; i < await names.count(); i++) {

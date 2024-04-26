@@ -49,7 +49,7 @@ export class RegisterPage {
         const year = faker.number.int({ min: 1912, max: 2006 });
         return day.toString().padStart(2, "0") + '-' + month.toString().padStart(2, "0") + '-' + year.toString();
     }
-
+    //the postal code is static, I had problems with NL postal codes
     async register() {
         let password = faker.internet.password();
         let name = faker.person.firstName()

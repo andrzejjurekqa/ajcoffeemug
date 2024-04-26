@@ -11,6 +11,7 @@ export class OrderPage {
         this.totalAmount = page.locator('.total-amount')
     }
 
+    //loop through products and return true if found 
     async verifyItemInOrder(productName) {
         const items = this.itemInfo;
         for (let i = 0; i < await items.count(); i++) {
