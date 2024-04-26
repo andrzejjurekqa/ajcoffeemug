@@ -1,6 +1,7 @@
 import { Page, Locator } from "@playwright/test";
+import { Generics } from "./generic/generics";
 
-export class MainPage {
+export class MainPage extends Generics {
 
     page: Page;
     searchBar: Locator;
@@ -20,6 +21,7 @@ export class MainPage {
     profileName: Locator;
 
     constructor(page) {
+        super();
         this.searchBar = page.locator('.js-search-fake');
         this.seachInput = page.locator('[id="q"]');
         this.searchResult = page.getByRole('link');
@@ -54,15 +56,7 @@ export class MainPage {
 
     //loop through product names and see if it matches the category
     async verifyProductType(text: string) {
-        const names = this.productName;
-        for (let i = 0; i < await names.count(); i++) {
-            const productNames = await names.nth(i).textContent();
-            if (productNames!.includes(text!)) {
-                return true;
-            } else {
-                throw new Error('Product not found');
-            }
-        }
+        this.genericLoop(this.productName, text)
     }
 
     async enterProductDetails(product: string) {
