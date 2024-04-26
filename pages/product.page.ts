@@ -8,10 +8,10 @@ export class ProductPage {
 
     constructor(page) {
         this.addToCart = page.getByRole('button', { name: ' in winkelmandje' });
-        this.selectOption = page.locator('.js-variation-swatchanchor');
+        this.selectOption = page.locator('li');
     }
 
     async selectSize(productSize: string) {
-        await this.selectOption.filter({ hasText: productSize }).click();
+        await this.selectOption.filter({ hasText: productSize }).nth(3).click();
     }
 }
