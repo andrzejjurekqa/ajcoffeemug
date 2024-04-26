@@ -14,6 +14,8 @@ let cookiesModal;
 let mainPage;
 
 test.describe('Registration', async () => {
+    let username;
+
     test.beforeEach(async ({ page }) => {
         loginSidebar = new LoginSidebar(page);
         registerPage = new RegisterPage(page);
@@ -26,7 +28,8 @@ test.describe('Registration', async () => {
         await loginSidebar.accountButton.click();
     })
     test('Register a new user', async () => {
-        await loginSidebar.emailField.fill(faker.internet.email());
+        username = faker.internet.email();
+        await loginSidebar.emailField.fill(username);
         await loginSidebar.registerButton.click();
         await registerPage.passwordField.fill(data.passwordField);
         await registerPage.firstName.fill(data.firstName);
@@ -45,7 +48,7 @@ test.describe('Registration', async () => {
         await loginSidebar.emailField.fill('bordan');
         await loginSidebar.registerButton.click();
         await expect(loginSidebar.incorrectEmailError).toBeVisible();
-        await loginSidebar.emailField.fill('totallynotfake@email.com');
+        await loginSidebar.emailField.fill(username);
         await loginSidebar.registerButton.click();
         await expect(loginSidebar.existEmailError).toBeVisible();
         await expect(loginSidebar.existEmailError).toContainText('dit e-mailadres is niet geldig');

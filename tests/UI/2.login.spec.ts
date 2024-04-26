@@ -9,6 +9,7 @@ let loginSidebar;
 let cookiesModal;
 
 test.describe('Login', async () => {
+    //page removes the 
     test.beforeEach(async ({ page }) => {
         loginSidebar = new LoginSidebar(page);
         cookiesModal = new CookiesModal(page);

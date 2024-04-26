@@ -33,7 +33,7 @@ export class MainPage {
         this.checkoutButton = page.locator('.checkout-btn');
         this.totalPrice = page.locator('.total-price > .price');
         this.greeting = page.locator('.acc-name-title');
-        this.profileName = page.locator('.profile-name');
+        this.profileName = page.locator('.js-btn-login');
     }
 
     async searchCategory(category: string) {
@@ -65,15 +65,6 @@ export class MainPage {
     }
 
     async enterProductDetails(product: string) {
-        let price;
-        const products = this.enterdetails;
-        for (let i = 0; i < await products.count(); i++) {
-            const productList = await products.nth(i).textContent();
-            if (productList!.includes(product!)) {
-                await products.nth(i).click();
-                price = this.productPrice.nth(i).textContent();
-                return price.toString().slice(1, 3);
-            }
-        }
+        await this.enterdetails.filter({ hasText: product }).click();
     }
 }

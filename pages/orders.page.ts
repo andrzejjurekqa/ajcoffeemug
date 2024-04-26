@@ -13,7 +13,7 @@ export class OrderPage {
 
     async verifyItemInOrder(productName) {
         const items = this.itemInfo;
-        for (let i = 0; i <= await items.count(); i++) {
+        for (let i = 0; i < await items.count(); i++) {
             const itemList = await items.nth(i).textContent();
             if (itemList!.includes(productName!)) {
                 return true

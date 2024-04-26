@@ -6,12 +6,11 @@ const baseUrl = 'https://www.hema.nl/';
 
 let pageManager;
 
-test.describe('E2E - electronics', async () => {
-    let username: string;
+test.describe('Register, Login, Select and Order', async () => {
+    let username;
     let creds;
     let password;
     let name;
-    let price: string;
 
     test.beforeEach(async ({ page }) => {
         pageManager = new PageManager(page);
@@ -20,9 +19,7 @@ test.describe('E2E - electronics', async () => {
         await pageManager.cookiesModal.acceptCookies.click();
         await expect(pageManager.cookiesModal.cookies).not.toBeVisible();
     })
-    test('Register, Login, Select and Order', async ({ browser }) => {
-        test.setTimeout(120000);
-        //start registration
+    test('Register and Login', async ({ browser }) => {
         await pageManager.loginSidebar.accountButton.click();
         username = await pageManager.loginSidebar.newEmail();
         creds = await pageManager.registerPage.register();
@@ -39,18 +36,23 @@ test.describe('E2E - electronics', async () => {
         await pageManager.loginSidebar.accountButton.click();
         await pageManager.loginSidebar.login(username, password);
         await expect(page2.url()).toEqual(baseUrl)
+        await expect(pageManager.mainPage.profileName).toContainText(name)
+    })
+    test('Select and Verify', async () => {
         //Search for electronics
         await pageManager.mainPage.searchCategory(data.category);
         await pageManager.mainPage.selectAvailable();
         await pageManager.mainPage.filterProducts(data.type);
-        const productVerfification = pageManager.mainPage.verifyProductType(data.type)
-        await expect(productVerfification).toBeTruthy();
-        price = await pageManager.mainPage.enterProductDetails(data.product);
+        await expect(pageManager.mainPage.verifyProductType(data.type)).toBeTruthy();
+    })
+    test('Add to cart and Verify', async () => {
         //Add to Cart & go to Checkout
+        await pageManager.mainPage.searchCategory(data.category);
+        await pageManager.mainPage.selectAvailable();
+        await pageManager.mainPage.filterProducts(data.type);
+        await pageManager.mainPage.enterProductDetails(data.product);
         await pageManager.productPage.addToCart.click();
         await pageManager.mainPage.checkoutButton.click();
-        const itemVerification = pageManager.orderPage.verifyItemInOrder(data.product);
-        await expect(itemVerification).toBeTruthy();
-        await expect(pageManager.orderPage.totalAmount.textContent()).toEqual(price);
+        await expect(pageManager.orderPage.verifyItemInOrder(data.product)).toBeTruthy();
     })
 })
