@@ -2,7 +2,6 @@ import { test, expect } from "@playwright/test"
 import { PageManager } from "../../pages/page.manager"
 import orderData from '../../test-data/electronics.data.json';
 const data = JSON.parse(JSON.stringify(orderData));
-const baseUrl = 'https://www.hema.nl/';
 
 let pageManager;
 
@@ -15,7 +14,7 @@ test.describe('Register, Login, Select and Order', async () => {
     test.beforeEach(async ({ page }) => {
         pageManager = new PageManager(page);
         //open the page and accept the cookies
-        await page.goto(baseUrl);
+        await page.goto('/');
         await pageManager.cookiesModal.acceptCookies.click();
         await expect(pageManager.cookiesModal.cookies).not.toBeVisible();
     })
@@ -30,12 +29,12 @@ test.describe('Register, Login, Select and Order', async () => {
         const context = await browser.newContext();
         const page2 = await context.newPage();
         pageManager = new PageManager(page2);
-        await page2.goto(baseUrl);
+        await page2.goto('/');
         await pageManager.cookiesModal.acceptCookies.click();
         await expect(pageManager.cookiesModal.cookies).not.toBeVisible();
         await pageManager.loginSidebar.accountButton.click();
         await pageManager.loginSidebar.login(username, password);
-        await expect(page2.url()).toEqual(baseUrl)
+        await expect(page2.url()).toEqual('/')
         await expect(pageManager.mainPage.profileName).toContainText(name)
     })
     test('Select and Verify', async () => {
