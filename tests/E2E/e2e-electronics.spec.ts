@@ -18,7 +18,7 @@ test.describe('Register, Login, Select and Order', async () => {
         await pageManager.cookiesModal.acceptCookies.click();
         await expect(pageManager.cookiesModal.cookies).not.toBeVisible();
     })
-    test('Register and Login', async ({ browser }) => {
+    test('Register and Login', async ({ browser, baseURL }) => {
         await pageManager.loginSidebar.accountButton.click();
         username = await pageManager.loginSidebar.newEmail();
         creds = await pageManager.registerPage.register();
@@ -34,7 +34,7 @@ test.describe('Register, Login, Select and Order', async () => {
         await expect(pageManager.cookiesModal.cookies).not.toBeVisible();
         await pageManager.loginSidebar.accountButton.click();
         await pageManager.loginSidebar.login(username, password);
-        await expect(page2.url()).toEqual('/')
+        await expect(page2.url()).toEqual(baseURL)
         await expect(pageManager.mainPage.profileName).toContainText(name)
     })
     test('Select and Verify', async () => {
