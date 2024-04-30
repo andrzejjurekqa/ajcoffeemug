@@ -24,7 +24,7 @@ export class MainPage extends Generics {
         super();
         this.searchBar = page.locator('.js-search-fake');
         this.seachInput = page.locator('[id="q"]');
-        this.searchResult = page.getByRole('link');
+        this.searchResult = page.locator('.search-phrase');
         this.productName = page.locator('js-product-link');
         this.enterdetails = page.locator('.js-product-container');
         this.filters = page.locator('[data-refinement-id="producttype"]');
@@ -41,7 +41,7 @@ export class MainPage extends Generics {
     async searchCategory(category: string) {
         await this.searchBar.click();
         await this.seachInput.fill(category);
-        await this.searchResult.filter({ hasText: category }).first().click();
+        await this.searchResult.filter({hasText: category }).first().click();
     }
 
     //hehe
